@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,15 +46,45 @@ namespace ShoqBitsSampleApplication
         }
     }  
 
-    public class BitViewModel
+    public class BitViewModel:INotifyPropertyChanged
     {
-
+        bool _bitValue;
         public ICommand BitPressedCmd { get; set; }
         public int BitNumber { get; set; }
-        public SolidColorBrush BitColor { get; set; }
+
+        public bool BitValue { 
+            get 
+            { 
+                return _bitValue; 
+            } 
+            set 
+            { 
+                _bitValue = value; 
+                NotifyPropertyChanged("BitValue");
+                NotifyPropertyChanged("BitColor");
+            } 
+        }
+        public SolidColorBrush BitColor
+        {
+            get
+            {
+                //here can be logic depends on bit value
+                //now logic depend on bit numbr
+                //return BitNumber % 2 == 0 ? Brushes.Red : Brushes.Gray;
+                return BitValue ? Brushes.Red : Brushes.Gray;
+            }
+        }
         void BitPressed()
         {
 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
     /// <summary>
@@ -76,7 +107,6 @@ namespace ShoqBitsSampleApplication
                     i => new BitViewModel() 
                     { 
                         BitNumber = i, 
-                        BitColor = i % 2==0 ? Brushes.Gray : Brushes.Yellow,
                         BitPressedCmd = new RelayCommand(ExecutedBitPressed)
                         }).ToList().ForEach(b=>Bits.Add(b));
 
@@ -85,7 +115,8 @@ namespace ShoqBitsSampleApplication
         private void ExecutedBitPressed(object sender)
         {
             var bit = (BitViewModel)sender;
-            MessageBox.Show(String.Format("Bit Pressed {0}",bit.BitNumber));
+            bit.BitValue = !bit.BitValue;
+            MessageBox.Show(String.Format("Bit {0} has changed",bit.BitNumber));
 
         }
 

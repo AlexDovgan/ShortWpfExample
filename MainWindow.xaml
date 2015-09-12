@@ -1,0 +1,28 @@
+﻿<Window x:Class="ShoqBitsSampleApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:custom="clr-namespace:ShoqBitsSampleApplication"
+        Title="MainWindow" Height="350" Width="525">
+    <ListBox x:Name="BitsBox" ItemsSource="{Binding Bits}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center"> </StackPanel>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Button Content="{Binding}" Command="{Binding BitPressedCmd}" CommandParameter="{Binding}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Rectangle Fill="{Binding BitColor}" Width="20" Height="20"></Rectangle>
+                                <TextBlock Text="{Binding BitNumber}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</Window>
